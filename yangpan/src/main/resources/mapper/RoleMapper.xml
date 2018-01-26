@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pan.mapper.RoleMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.pan.entity.Role">
+		<id column="ROLE_ID" property="roleId" />
+		<result column="ROLE_NAME" property="roleName" />
+		<result column="ROLE_DESCR" property="roleDescr" />
+		<result column="KEYWORD" property="keyword" />
+		<result column="STATUS" property="status" />
+		<result column="CREATED_BY" property="createdBy" />
+		<result column="CREATED_DATE" property="createdDate" />
+		<result column="UPDATED_BY" property="updatedBy" />
+		<result column="UPDATED_DATE" property="updatedDate" />
+	</resultMap>
+	
+	
+	<!-- 通用查询映射结果 -->
+	<resultMap id="ResultUserRoleMap" type="com.pan.entity.Role">
+		<id column="ROLE_ID" property="roleId" />
+		<result column="ROLE_NAME" property="roleName" />
+		<result column="ROLE_DESCR" property="roleDescr" />
+		<result column="KEYWORD" property="keyword" />
+		<result column="STATUS" property="status" />
+		<result column="CREATED_BY" property="createdBy" />
+		<result column="CREATED_DATE" property="createdDate" />
+		<result column="UPDATED_BY" property="updatedBy" />
+		<result column="UPDATED_DATE" property="updatedDate" />
+		<!--当表之间的关系是一对多时，用 collection-->
+		<collection property="users" ofType="com.pan.entity.User"  column="ROLE_ID" select="findUserByRoleId"></collection>
+	</resultMap>
+
+	
+	
+	
+	<!-- 查询所有角色 -->
+	<select id="findAllRole"    resultMap="ResultUserRoleMap">
+		SELECT * FROM role
+	</select>
+	<!-- 根据roleId 查询 user -->
+	<select id="findUserByRoleId" parameterType="string" resultMap="BaseResultMap">
+		SELECT 
+		  u.* 
+		FROM
+		  USER u,
+		  user_role ur 
+		WHERE ur.USER_ID = u.`USER_ID` 
+		  AND ur.ROLE_ID = #{roleId} 	
+	</select>
+
+	<!-- 根据用户id查询 role -->
+	<select id="findRoleByUserId"  parameterType="java.lang.String" resultMap="BaseResultMap" >
+		SELECT 
+		  r.* 
+		FROM
+		  role r,
+		  user_role ur 
+		WHERE r.role_id = ur.role_id 
+		  AND ur.user_id = #{userId}
+	</select>
+</mapper>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pan.mapper.MenuMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.pan.entity.Menu">
+		<id column="MENU_ID" property="menuId" />
+		<result column="MENU_NO" property="menuNo" />
+		<result column="MENU_NAME" property="menuName" />
+		<result column="UP_MENU_NO" property="upMenuNo" />
+		<result column="MENU_LEVEL" property="menuLevel" />
+		<result column="MENU_ISPARENT" property="menuIsparent" />
+		<result column="MENU_ORDER" property="menuOrder" />
+		<result column="MENU_URL" property="menuUrl" />
+		<result column="MENU_DESCR" property="menuDescr" />
+		<result column="MENU_IMG" property="menuImg" />
+		<result column="STATUS" property="status" />
+		<result column="CREATED_BY" property="createdBy" />
+		<result column="CREATED_DATE" property="createdDate" />
+		<result column="UPDATED_BY" property="updatedBy" />
+		<result column="UPDATED_DATE" property="updatedDate" />
+	</resultMap>
+	
+	<select id="findMenuByRoleId" parameterType="string"  resultMap="BaseResultMap">
+	
+	
+	</select>
+
+</mapper>

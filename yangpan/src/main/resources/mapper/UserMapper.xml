@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pan.mapper.UserMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.pan.entity.User">
+		<id column="USER_ID" property="userId" />
+		<result column="USER_NO" property="userNo" />
+		<result column="USERNAME" property="username" />
+		<result column="CERT_NO" property="certNo" />
+		<result column="MOBILE_TEL" property="mobileTel" />
+		<result column="EMAIL" property="email" />
+		<result column="STATUS" property="status" />
+		<result column="PSWD" property="pswd" />
+		<result column="PSWD_LEVEL" property="pswdLevel" />
+		<result column="REMARK" property="remark" />
+		<result column="CREATED_BY" property="createdBy" />
+		<result column="CREATED_DATE" property="createdDate" />
+		<result column="UPDATED_BY" property="updatedBy" />
+		<result column="UPDATED_DATE" property="updatedDate" />
+	</resultMap>
+	
+	
+		<!-- 根据 -->
+	<resultMap id="ResulUserRoletMap" type="com.pan.entity.User">
+		<id column="USER_ID" property="userId" />
+		<result column="USER_NO" property="userNo" />
+		<result column="USERNAME" property="username" />
+		<result column="CERT_NO" property="certNo" />
+		<result column="MOBILE_TEL" property="mobileTel" />
+		<result column="EMAIL" property="email" />
+		<result column="STATUS" property="status" />
+		<result column="PSWD" property="pswd" />
+		<result column="PSWD_LEVEL" property="pswdLevel" />
+		<result column="REMARK" property="remark" />
+		<result column="CREATED_BY" property="createdBy" />
+		<result column="CREATED_DATE" property="createdDate" />
+		<result column="UPDATED_BY" property="updatedBy" />
+		<result column="UPDATED_DATE" property="updatedDate" />
+		<!--当表之间的关系是一对多时，用 collection-->
+		<collection property="roles" ofType="com.pan.entity.Role"  column="USER_ID" select="findRoleByUserId"></collection>
+	</resultMap>
+	
+		<resultMap id="MenuResultMap" type="com.pan.entity.Menu">
+		<id column="MENU_ID" property="menuId" />
+		<result column="MENU_NO" property="menuNo" />
+		<result column="MENU_NAME" property="menuName" />
+		<result column="UP_MENU_NO" property="upMenuNo" />
+		<result column="MENU_LEVEL" property="menuLevel" />
+		<result column="MENU_ISPARENT" property="menuIsparent" />
+		<result column="MENU_ORDER" property="menuOrder" />
+		<result column="MENU_URL" property="menuUrl" />
+		<result column="MENU_DESCR" property="menuDescr" />
+		<result column="MENU_IMG" property="menuImg" />
+		<result column="STATUS" property="status" />
+		<result column="CREATED_BY" property="createdBy" />
+		<result column="CREATED_DATE" property="createdDate" />
+		<result column="UPDATED_BY" property="updatedBy" />
+		<result column="UPDATED_DATE" property="updatedDate" />
+	</resultMap>
+		<select id="findMenuByUserId"  parameterType="string"  resultMap="MenuResultMap">
+			SELECT 
+			  m.* 
+			FROM
+			  Menu m 
+			  INNER JOIN role_Menu rm 
+			    ON m.`MENU_ID` = rm.`MENU_ID` 
+			  INNER JOIN role r 
+			    ON r.ROLE_ID = rm.`ROLE_ID` 
+			  INNER JOIN user_role ur 
+			    ON ur.`ROLE_ID` = r.`ROLE_ID` 
+			  INNER JOIN `user` u 
+			    ON u.`USER_ID` = ur.`USER_ID` 
+			WHERE u.`USER_ID` = #{userId} 
+		</select>
+	
+	<!-- 查询所有用户 -->
+	<select id="findAllUser"    resultMap="ResulUserRoletMap">
+		SELECT * FROM user
+	</select>
+	<!-- 查询所有用户 -->
+	<select id="selectAllUser"    resultMap="BaseResultMap">
+		SELECT * FROM user
+	</select>
+	<!--根据用户ID查询里面的角色-->
+ 	<select id="findRoleByUserId"  parameterType="java.lang.String" resultMap="BaseResultMap" >
+		SELECT 
+		  r.* 
+		FROM
+		  role r,
+		  user_role ur 
+		WHERE r.role_id = ur.role_id 
+		  AND ur.user_id = #{userId} 	
+	</select> 
+	<!-- 根据用户名查询 user -->
+	<select id="findUserByUsername"  parameterType="java.lang.String" resultMap="BaseResultMap" >
+		SELECT 
+		  * 
+		FROM
+		  USER 
+		WHERE username = #{username} 		
+	
+	</select>
+
+</mapper>

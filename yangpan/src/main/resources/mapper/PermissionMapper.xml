@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pan.mapper.PermissionMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.pan.entity.Permission">
+		<id column="PERMISSION_ID" property="permissionId" />
+		<result column="PERMISSION_NAME" property="permissionName" />
+		<result column="INTERFACE_FUNCTION" property="interfaceFunction" />
+		<result column="PERMISSION_URL" property="permissionUrl" />
+		<result column="STATUS" property="status" />
+		<result column="KEYWORD" property="keyword" />
+		<result column="REMARK" property="remark" />
+		<result column="CREATED_BY" property="createdBy" />
+		<result column="CREATED_DATE" property="createdDate" />
+		<result column="UPDATED_BY" property="updatedBy" />
+		<result column="UPDATED_DATE" property="updatedDate" />
+	</resultMap>
+	
+	<resultMap id="userPermissionMap" type="com.pan.entity.Permission">
+		<id column="PERMISSION_ID" property="permissionId" />
+		<result column="PERMISSION_NAME" property="permissionName" />
+		<result column="INTERFACE_FUNCTION" property="interfaceFunction" />
+		<result column="PERMISSION_URL" property="permissionUrl" />
+		<result column="STATUS" property="status" />
+		<result column="KEYWORD" property="keyword" />
+		<result column="REMARK" property="remark" />
+		<result column="CREATED_BY" property="createdBy" />
+		<result column="CREATED_DATE" property="createdDate" />
+		<result column="UPDATED_BY" property="updatedBy" />
+		<result column="UPDATED_DATE" property="updatedDate" />
+	</resultMap>
+	<!-- 查询所有权限 -->
+	<select id="findAllPermission"  resultMap="BaseResultMap">
+		SELECT 
+		  * 
+		FROM
+		  permission  
+		  	
+	</select>
+	<select id="findPermissionByRoleId"  parameterType="string" resultMap="BaseResultMap">
+		SELECT 
+		  p.* 
+		FROM
+		  role_permission rp 
+		  INNER JOIN permission p 
+		    ON rp.PERMISSION_ID = p.`PERMISSION_ID` 
+		WHERE rp.`ROLE_ID` = #{roleId} 		
+	</select>
+	
+	<select id="findPermissionByUserId" parameterType="string" resultMap="userPermissionMap" >
+		SELECT 
+		  p.* 
+		FROM
+		  permission p 
+		  INNER JOIN role_permission rp 
+		    ON p.PERMISSION_ID = rp.PERMISSION_ID 
+		  INNER JOIN role r 
+		    ON r.`ROLE_ID` = rp.`ROLE_ID` 
+		  INNER JOIN user_role ur 
+		    ON ur.ROLE_ID = r.ROLE_ID 
+		WHERE ur.`USER_ID` = #{userId}	
+	
+	</select>
+</mapper>
