@@ -10,7 +10,7 @@ import java.lang.reflect.Method;
  * @author yangpan
  * @Title: dynamic
  * @Package com.cancer.dynamic.aop
- * @Description:
+ * @Description:111
  * @date 2018/5/1713:45
  */
 public abstract class AbstractDynamicDataSourceInterceptor implements MethodBeforeAdvice{
